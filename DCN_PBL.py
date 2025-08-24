@@ -8,9 +8,6 @@ import time
 import random
 import re
 
-# ========================================================================================
-# SENDER-SIDE CORE LOGIC (CLASS: NetworkPacket)
-# ========================================================================================
 class NetworkPacket:
     def __init__(self, data=""):
         self.original_data=data; self.application_data=None; self.transport_data=None; self.network_data=None
@@ -113,9 +110,7 @@ class NetworkPacket:
                     f"  - Resulting Codeword (p1p2d1p3d2d3d4): {calc['codeword']}")
         self.frame_explanations['physical'] = exp
 
-# ========================================================================================
-# RECEIVER-SIDE CORE LOGIC
-# ========================================================================================
+
 class NetworkPacketReceiver:
     def __init__(self):
         self.reset()
@@ -260,9 +255,7 @@ class HammingDetailWindow(tk.Toplevel):
             ttk.Label(frame,font=("Courier", 10, "bold"), text=f"Syndrome (c3c2c1): {calc['syndrome']} -> Error at bit {calc['error_pos']}").grid(row=5,column=0,sticky='w',pady=(8,2))
             ttk.Label(frame,font=("Courier", 10, "bold"), text=f"Corrected:   {calc['corrected_block']}", foreground="green").grid(row=6,column=0,sticky='w',pady=2)
 
-# ========================================================================================
-# SENDER & RECEIVER UI FRAMES
-# ========================================================================================
+
 class SenderFrame(ttk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent, padding="10")
@@ -398,9 +391,7 @@ class ReceiverFrame(ttk.Frame):
                 LayerWindow(self,"Receiver: Final Data", self.packet.final_data, self.packet.to_binary(self.packet.final_data), exp)
         except Exception as e: messagebox.showerror("Display Error",f"Could not show layer.\n{e}")
 
-# ========================================================================================
-# MAIN APPLICATION CONTROLLER
-# ========================================================================================
+
 class IntegratedSimulator:
     def __init__(self, root):
         self.root = root
@@ -424,7 +415,7 @@ class IntegratedSimulator:
         if self.sender_ui.error_var.get():
             self.sender_ui.log("Injecting a random single-bit error...", "red")
             pos = random.randint(0, len(stream) - 1)
-            # This is the corrected line for injecting an error
+       
             stream = stream[:pos] + ('0' if stream[pos] == '1' else '1') + stream[pos+1:]
         else:
             self.sender_ui.log("Transmitting frame without errors.")
@@ -446,3 +437,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = IntegratedSimulator(root)
     root.mainloop()
+
